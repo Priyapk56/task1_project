@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const Student = require('../models/studentModel');
 
-let lastId = 0; // Initialize lastId to 0
+let lastId=0;
 
-// Fetch all students
+
 router.get('/', async (req, res) => {
     try {
         const students = await Student.find();
         if (students.length > 0) {
-            lastId = Math.max(...students.map(student => student.id)); // Update lastId to the highest existing ID
+            lastId = Math.max(...students.map(student => student.id)) 
         }
         res.json(students);
     } catch (error) {
@@ -17,12 +17,12 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Add a new student
+
 router.post('/', async (req, res) => {
-    lastId++; // Increment the lastId
+    lastId++; 
     const newStudent = new Student({
-        id: lastId, // Set the ID to lastId
-        ...req.body // Spread the rest of the request body
+        id: lastId, // Set ID to lastId
+        ...req.body 
     });
 
     try {
@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Update a student by ID
+
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
     const updatedStudent = await Student.findOneAndUpdate({ id: parseInt(id) }, req.body, { new: true });
@@ -44,7 +44,6 @@ router.put('/:id', async (req, res) => {
     res.json(updatedStudent);
 });
 
-// Delete a student by ID
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     const deletedStudent = await Student.findOneAndDelete({ id: parseInt(id) });
