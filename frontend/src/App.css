@@ -1,0 +1,19 @@
+@import '~normalize.css';
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
+body{
+  display: flex;
+  justify-content: center;
+}
+.Task{
+  border: 1px solid;
+  width: 100%;
+  margin:20px 0;
+}
+
+th,td{
+  border: 1px solid;
+}
+.App{
+  text-align: center;
+}
