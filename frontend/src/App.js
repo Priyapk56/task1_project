@@ -15,6 +15,7 @@ function App() {
   const [newAddress, setNewAddress] = useState("");
   const [newBloodGroup, setNewBloodGroup] = useState("");
   const [newHobby, setNewHobby] = useState("");
+  const [original,setOriginal]=useState("");
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -86,20 +87,40 @@ function App() {
   const onChangeHandler = (id, key, value) => {
     setStudents((prevStudents) => {
       return prevStudents.map(student => {
-        return student.id === id ? { ...student, [key]: value } : student;
+        if(student.id === id)
+          { 
+            if(!original){
+              setOriginal(student);
+            }
+            return  {...student, [key]: value};;
+          }
+          return student;  
       });
     });
   };
 
+  const changesMade=(originalStudent,updates)=>{
+    for(const key in originalStudent){
+      if(originalStudent[key] !== updates[key]){
+        return true;
+      }
+    }
+    return false;
+  }
+
   const updateStudent = async (id) => {
     const updatedStudent = students.find((student) => student.id === id);
+
     
+  if(original && changesMade(original , updatedStudent))  {
     try {
       await axios.put(`http://localhost:5000/student/${id}`, updatedStudent, {
         headers: {
           'api-key': process.env.REACT_APP_API_KEY,
         },
       });
+      setOriginal(null);
+
       AppToaster.show({
         message: "Student updated Successfully",
         intent: "success",
@@ -113,6 +134,7 @@ function App() {
         timeout: 3000,
       });
     }
+  }
   };
 
   const deleteStudent = async (id) => {
